@@ -10,8 +10,8 @@ fp.fn                   Calculation of fp and fn based on a vector of
 Fstat                   Calculation of F statistic by gene given a
                         linear model
 gap                     GAP statistic clustering figure of merit
-GSEA.Hotelling          Gene Set Enrichment Analysis
-GSEA.t2                 Gene Set Enrichment Analysis
+GSEA.mean.t             Gene Set Enrichment Analysis using output from
+                        samroc
 JT.test                 Jonckheere-Terpstra trend test
 list.experiments        Display all experiment names and id's
 list.intersection.p     p-value for intersection of two gene lists.
@@ -25,17 +25,19 @@ p0.mom                  Estimate proportion unchanged genes
 pava                    Pooling of Adjacent Violators
 pava.fdr                Estimate of the FDR and the proportion
                         unchanged genes
-permutation.t           bootstrap p-value for matrix with variables in
-                        rows and with arbitrary missing structure.
+R2BASE                  Produces a BASE file
 R2mim                   Output a script file to WinMIM
 rank.genes              Rank genes with respect to multiple criteria
 rank.trend              Trens analysis based on ranks
 rsd.test                Compare two groups with respect to their RSD
                         (CV)
+samroc.result-class     Class "samroc.result" for results of the
+                        function samrocN
 samrocN                 Calculate ROC curve based SAM statistic
 samrocNboot             Calculate ROC curve based SAM statistic
 union.of.pways          Create the union of two pathway lists
-Xprep                   Calculation of input to stat.bayesian starting
-                        from linear model
+Xprep                   Fitting of a linear model
+Xprep.resid             Calculation of input of residuals from linear
+                        model
 Zfreq                   Bayesian analysis of a Comparative experiment
                         with two groups

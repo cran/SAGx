@@ -2,7 +2,7 @@
 # Author: Per Broberg 14AUG01 #
 # History : modified 23SEP01, 20JAN02, 22FEB04 #
 
-Xprep<-function(indata=M,formula=~as.factor(g),contrast=c(0,1),design=NULL,Vars = NULL){
+Xprep<-function(indata=M,formula=~as.factor(g),contrast=c(0,1),design=NULL){
 # indata <- utmat;formula <-  ~as.factor(g);contrast <- c(0,1);design <- NULL
    if(is.null(design)) xmat <- model.matrix(formula) else xmat <- design
    npar <- qr(xmat)$rank;nobs <- ncol(indata)

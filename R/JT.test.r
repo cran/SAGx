@@ -5,7 +5,7 @@ JT.test <- function(data = utmat,class = g, labels = NULL){
 
 n.obs <- ncol(data)
 
-class.tab <- unique(class)
+class.tab <- unique(class);class.tab <- class.tab[order(class.tab)]
 
 wilcox.stat <- function(x,y){
         r <- rank(c(x, y))

@@ -1,9 +1,9 @@
-# samrocN, author Per Broberg, version 31AUG02, modified 13NOV02, 27MAY04 , 07OCT05 #
-samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c(50, 100, 200, 300), B = 100, perc = 0.6, smooth = FALSE, w = 1, measure = "euclid") 
+# samrocN, author Per Broberg, version 31AUG02, modified 13NOV02, 27MAY04 , 07OCT05, 31MAY06 #
+samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c(50, 100, 200, 300), B = 100, perc = 0.6, smooth = FALSE, w = 1, measure = "euclid", probeset = NULL) 
 {
-
 #  data <- utmat;formula <- ~as.factor(g);contrast <- c(0, 1);N <- c(50,100,200,300)
 #  B <- 100;perc <- 0.6;smooth <- F;measure <- c("euclid");w <- 1
+    nrows <- nrow(as.matrix(data));ncols = ncol(as.matrix(data))
     utest <- Xprep(indata = data, formula = formula, contrast = contrast)
     ss <- sqrt(utest$Vest/utest$k)
     minss <- min(ss)
@@ -17,10 +17,10 @@ samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c
     ssq <- quantile(ss, probs = seq(0, perc, by = 0.05))
     ssq <- c(0, ssq)
     ss <- sqrt(utest$Vest/utest$k)
-    diffs <- matrix(nrow = nrow(as.matrix(data)), ncol = B)
-    sses <- matrix(nrow = nrow(as.matrix(data)), ncol = B)
-    varses <- matrix(nrow = nrow(as.matrix(data)), ncol = B)
-    pj <- numeric(length = nrow(as.matrix(data)))
+    diffs <- matrix(nrow = nrows, ncol = B)
+    sses <- matrix(nrow = nrows, ncol = B)
+    varses <- matrix(nrow = nrows, ncol = B)
+    pj <- numeric(length = nrows)
     pts <- matrix(nrow = length(ssq), ncol = length(N))
     p.is <- matrix(nrow = length(ssq), ncol = length(N))
     target <- numeric(length(ssq))
@@ -45,8 +45,9 @@ samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c
         alpha <- 1 - Fn(di.min)
         pj <- 1 - Fn(abs(di))
         pt <- numeric(length(N))
-        p.i <- apply(as.matrix(alpha), 1, function(x) max(pj[pj <  x]))
-        p.is[i, ] <- p.i
+#        p.i <- apply(as.matrix(alpha), 1, function(x) max(pj[pj <  x]))
+#        p.is[i, ] <- p.i
+        p.is[i, ] <- alpha
         for (j in 1:length(alpha)) pt[j] <- mean((pj < alpha[j]))
            pts[i, ] <- pt
     }
@@ -72,13 +73,33 @@ samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c
     di <- t(utest$Mbar/(sqrt(utest$Vest/utest$k) + snew))
     dstari <- diffs/(snew + sses)
     Vest0 <- as.numeric(utest$k) * sses^2
-#   as.vector PBG/07OCT05
-    Fn <- ecdf(abs(as.vector(dstari)))
-    pj <- 1 - Fn(abs(di))
+#   as.vector PBG/07OCT05; p-value defined as in Davison & Hinkley PBG/12APR06 
+    Fn <- ecdf(-abs(as.vector(dstari)))
+    pj <- (nrows*B*Fn(-abs(di))+1)/(nrows*B+1)
         fp <- p0 * pj
         fn <- 1 - p0 * (1 - pj) - rank(pj)/length(pj)
         errors <- fp + fn
-    list(d = di, diff = utest$Mbar, se = sqrt(utest$Vest/utest$k), 
-        d0 = dstari, p0 = p0, s0 = snew, pvalues = pj, N = N.opt, 
-        errors=errors)
+if(is.null(probeset)) probeset <- paste("probeset",1:nrows)        
+res <-   new("samroc.result", 
+             d = as.vector(di), 
+             diff = as.vector(utest$Mbar),
+             se = as.vector(sqrt(utest$Vest/utest$k)),
+             d0 = dstari,
+             p0 = p0,
+             s0 = snew,
+             pvalues = pj,
+             N.list = as.integer(N.opt),
+             errors = errors,
+             formula = formula,
+             contrast = contrast,
+             annotation = as.character(date()),
+             N.sample = ncols,
+             B = as.integer(B),
+             call = as.character(match.call()),
+             id = as.character(probeset),
+             error.df = as.integer(utest$f)
+)
+
+res 
+        
 }

@@ -6,7 +6,8 @@
 \description{Calculation of the regularised t-statistic which minimises 
 the false positive and false negative rates.}
 
-\usage{samrocN(data=M,formula=~as.factor(g), contrast=c(0,1), N = c(50, 100, 200, 300),B=100, perc = 0.6,  smooth = FALSE, w = 1, measure = "euclid")}
+\usage{samrocN(data=M,formula=~as.factor(g), contrast=c(0,1), N = c(50, 100, 200, 300),B=100, perc = 0.6, 
+ smooth = FALSE, w = 1, measure = "euclid", probeset = NULL)}
 
 \arguments{
 \item{data}{The data matrix}
@@ -18,20 +19,12 @@ the false positive and false negative rates.}
 \item{smooth}{if TRUE, the std will be estimated as a smooth function of expression level}
 \item{w}{the relative weight of false positives}
 \item{measure}{the goodness criterion}
+\item{probeset}{probeset ids;if NULL then "probeset 1", "probeset 2", ... are used.}
 }
 
 \author{Per Broberg}
 
-\value{A list with components
-\item{d}{the statistic for each probe set}
-\item{diff}{The effect estimate, e.g. the mean difference between two groups}
-\item{se}{the standard error}
-\item{d0}{the bootstrapped values on the test statistic}
-\item{p0}{the proportion unchanged genes}
-\item{s0}{the regularising constant}
-\item{pvalues}{the p-values}
-\item{N}{The optimal toplist size}
-\item{errors}{the estimated sum of false positive and false negative rates when selcted the gene and all higher ranking ones}
+\value{An object of class samroc.result.}
 }
 
 \details{The test statistic is based on the one in Tusher et al (2001):
@@ -41,6 +34,7 @@ the false positive and false negative rates.}
 where \eqn{diff} is a the estimate of a constrast, \eqn{s_0} is the regularizing constant 
 and \eqn{s} the standard error.  At the heart of the method lies an estimate of the false negative and false positive rates. The
 test is calibrated so that these are minimised. For calculation of \eqn{p}-values a bootstrap procedure is invoked. Further details are given in Broberg (2003).
+Note that the definition of p-values follows that in Davison and Hinkley (1997), in order to avoid p-values that equal zero.
 
 The p-values are calculated through permuting the rows of the design matrix for the columns such that the coresponding contrast 
 coefficient is not zero. This means that factors not tested are kept fixed. NB This may be adequate for testing a factor with two levels, but it 
@@ -57,6 +51,7 @@ Broberg, P. (2002) Ranking genes with respect to differential expression , \url{
 Broberg. P: Statistical methods for ranking differentially expressed genes. Genome Biology 2003, 4:R41
 \url{ http://genomebiology.com/2003/4/6/R41}
 
+Davison A.C. and Hinkley D.V. (1997) Bootstrap Methods and Their Application. Cambridge University Press
 
 }
 

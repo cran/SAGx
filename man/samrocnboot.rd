@@ -6,7 +6,8 @@
 \description{A c-code version of samrocN. Calculation of the regularised t-statistic which minimises 
 the false positive and false negative rates.}
 
-\usage{samrocNboot(data=M,formula=~as.factor(g), contrast=c(0,1), N = c(50, 100, 200, 300), B=100, perc = 0.6, smooth=FALSE, w = 1, measure = "euclid")}
+\usage{samrocNboot(data=M,formula=~as.factor(g), contrast=c(0,1), N = c(50, 100, 200, 300), B=100, perc = 0.6, 
+smooth=FALSE, w = 1, measure = "euclid", probeset = NULL)}
 
 \arguments{
 \item{data}{The data matrix}
@@ -18,20 +19,12 @@ the false positive and false negative rates.}
 \item{smooth}{if TRUE, the std will be estimated as a smooth function of expression level}
 \item{w}{the relative weight of false positives}
 \item{measure}{the goodness criterion}
+\item{probeset}{probeset ids;if NULL then "probeset 1", "probeset 2", ... are used.}
 }
 
 \author{Per Broberg and Freja Vamborg}
 
-\value{A list with components
-\item{d}{the statistic for each probe set}
-\item{diff}{The effect estimate, e.g. the mean difference between two groups}
-\item{se}{the standard error}
-\item{d0}{the bootstrapped values on the test statistic}
-\item{p0}{the proportion unchanged genes}
-\item{s0}{the regularising constant}
-\item{pvalues}{the p-values}
-\item{N}{The optimal toplist size}
-\item{errors}{the estimated sum of false positive and false negative rates when selcted the gene and all higher ranking ones}
+\value{An object of class samroc.result.}
 }
 
 \details{The test statistic is based on the one in Tusher et al (2001):
@@ -57,13 +50,12 @@ data(golub)
  # in the matrix golub, and the sample labels in the vector golub.cl
 set.seed(849867)
 samroc.res <- samrocNboot(data = golub, formula = ~as.factor(golub.cl))
-#Warning message: 
-#package 'modreg' has been merged into 'stats' 
- samroc.res$p0
-#[1] 0.4776763
+# The proportion of unchanged genes is estimated at
+samroc.res@p0
+# The fudge factor equals
  samroc.res$s0
-#  0 
- hist(samroc.res$pvalue)
+# A histogram of p-values
+ hist(samroc.res@pvalues)
  # many genes appear changed
 }
 
