@@ -1,4 +1,4 @@
-# samrocN, author Per Broberg, version 31AUG02, modified 13NOV02, 27MAY04  #
+# samrocN, author Per Broberg, version 31AUG02, modified 13NOV02, 27MAY04 , 07OCT05 #
 samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c(50, 100, 200, 300), B = 100, perc = 0.6, smooth = FALSE, w = 1, measure = "euclid") 
 {
 
@@ -24,9 +24,10 @@ samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c
     pts <- matrix(nrow = length(ssq), ncol = length(N))
     p.is <- matrix(nrow = length(ssq), ncol = length(N))
     target <- numeric(length(ssq))
-    xmat <- model.matrix(formula)
+    sam <- utest$design
+# Restricted randomisation introduced PBG/07OCT05 
     for (i in 1:B) {
-        sam <- utest$design[sample(1:nrow(utest$design)), ]
+        sam[,contrast > 0] <- utest$design[sample(1:nrow(utest$design)),contrast > 0]
         utest0 <- Xprep(indata = data, formula = NULL, design = sam, 
             contrast = contrast)
         diffs[, i] <- utest0$Mbar
@@ -34,19 +35,15 @@ samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c
             for (j in 1:nrow(data)) sses[j, i] <- ss[j]
         }, sses[, i] <- sqrt(utest0$Vest/utest0$k))
     }
-     
-  
+      
     for (i in 1:length(ssq)) {
         dstari <- diffs/(ssq[i] + sses)
         di <- t(utest$Mbar/(sqrt(utest$Vest/utest$k) + ssq[i]))
         di.min <- quantile(abs(di), probs = (nrow(data)-N)/nrow(data), na.rm = TRUE)
-#TLG/040721        library(stats)
-        Fn <- ecdf(abs(dstari))
+# as.vector introduced PBG 07OCT05        
+        Fn <- ecdf(abs(as.vector(dstari)))
         alpha <- 1 - Fn(di.min)
         pj <- 1 - Fn(abs(di))
-#        test <- sweep(abs(dstari),1, abs(di), FUN = "-")
-#        pj <- t(crossprod(c(rep(1/ncol(test), ncol(test))), t(test > 0)))
-#        pj <- apply(as.matrix(di), 1, function(x) mean(abs(dstari) >  abs(x)))
         pt <- numeric(length(N))
         p.i <- apply(as.matrix(alpha), 1, function(x) max(pj[pj <  x]))
         p.is[i, ] <- p.i
@@ -56,11 +53,8 @@ samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c
     pfn <- matrix(nrow = length(ssq), ncol = length(alpha))
     tone <- t(utest$Mbar/ss)
     tnull <- diffs/sses
-    Fn <- ecdf(abs(tnull))
+    Fn <- ecdf(abs(as.vector(tnull)))
     ps <- 1 - Fn(abs(tone))
-#    test <- sweep(abs(tnull),1, abs(tone), FUN = "-")
-#    ps <- t(crossprod(c(rep(1/ncol(test), ncol(test))), t(test > 0)))
-#    ps <- apply(as.matrix(tone), 1, function(x) mean(abs(tnull) > abs(x)))
     p0 <- p0.mom(ps = ps)$PRE
     if(p0 >= 0.999) p0 <- 0.999
     for (j in 1:length(ssq)) pfn[j, ] <- 1 - p0 * (1 - alpha) -  pts[j, ]
@@ -78,11 +72,9 @@ samrocN <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N = c
     di <- t(utest$Mbar/(sqrt(utest$Vest/utest$k) + snew))
     dstari <- diffs/(snew + sses)
     Vest0 <- as.numeric(utest$k) * sses^2
-#    pj <- apply(as.matrix(t(di)), 1, function(x) mean(abs(dstari) > abs(x)))
-    Fn <- ecdf(abs(dstari))
-#    test <- sweep(abs(dstari),1, abs(di), FUN = "-")
+#   as.vector PBG/07OCT05
+    Fn <- ecdf(abs(as.vector(dstari)))
     pj <- 1 - Fn(abs(di))
-#    pj <- t(crossprod(c(rep(1/ncol(test), ncol(test))), t(test > 0)))
         fp <- p0 * pj
         fn <- 1 - p0 * (1 - pj) - rank(pj)/length(pj)
         errors <- fp + fn

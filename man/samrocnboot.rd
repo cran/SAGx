@@ -55,8 +55,8 @@ library(multtest)
 data(golub)
  # This makes the expression data from Golub et al available
  # in the matrix golub, and the sample labels in the vector golub.cl
- 
- samroc.res <- samrocNboot(data = golub, formula = ~as.factor(golub.cl))
+set.seed(849867)
+samroc.res <- samrocNboot(data = golub, formula = ~as.factor(golub.cl))
 #Warning message: 
 #package 'modreg' has been merged into 'stats' 
  samroc.res$p0

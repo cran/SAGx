@@ -3,7 +3,7 @@
 
 \title{Calculate ROC curve based SAM statistic}
 
-\description{A c-code version of samrocN. Calculation of the regularised t-statistic which minimises 
+\description{Calculation of the regularised t-statistic which minimises 
 the false positive and false negative rates.}
 
 \usage{samrocN(data=M,formula=~as.factor(g), contrast=c(0,1), N = c(50, 100, 200, 300),B=100, perc = 0.6,  smooth = FALSE, w = 1, measure = "euclid")}
@@ -42,7 +42,9 @@ where \eqn{diff} is a the estimate of a constrast, \eqn{s_0} is the regularizing
 and \eqn{s} the standard error.  At the heart of the method lies an estimate of the false negative and false positive rates. The
 test is calibrated so that these are minimised. For calculation of \eqn{p}-values a bootstrap procedure is invoked. Further details are given in Broberg (2003).
 
-The p-values are calculated through permuting the rows of the design matrix. NB This is not adequate for all linear models.
+The p-values are calculated through permuting the rows of the design matrix for the columns such that the coresponding contrast 
+coefficient is not zero. This means that factors not tested are kept fixed. NB This may be adequate for testing a factor with two levels, but it 
+is not adequate for all linear models.
 
 samrocN calls the function Xprep which has been improved in terms of speed. } 
 

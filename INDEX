@@ -1,5 +1,3 @@
-caha                    Clustering Goodness measured by the
-                        Calinski-Harabasz index
 clin2mim                Output a script file to WinMIM, linking
                         clinical data and gene expression
 cluster.q               Clustering Goodness measured by Q2
@@ -12,13 +10,15 @@ fp.fn                   Calculation of fp and fn based on a vector of
 Fstat                   Calculation of F statistic by gene given a
                         linear model
 gap                     GAP statistic clustering figure of merit
+GSEA.Hotelling          Gene Set Enrichment Analysis
+GSEA.t2                 Gene Set Enrichment Analysis
 JT.test                 Jonckheere-Terpstra trend test
 list.experiments        Display all experiment names and id's
 list.intersection.p     p-value for intersection of two gene lists.
 mat2TeX                 Ouput matrix to LaTeX
 myclus                  A clustering function
-nn.impute               Impute mean based on k nearest neighbours
 normalise               Normalise arrays
+one.probeset.per.gene   Select the best probeset per gene
 outlier                 Identify outliers in the multivariate
                         distribution
 p0.mom                  Estimate proportion unchanged genes
@@ -34,6 +34,7 @@ rsd.test                Compare two groups with respect to their RSD
                         (CV)
 samrocN                 Calculate ROC curve based SAM statistic
 samrocNboot             Calculate ROC curve based SAM statistic
+union.of.pways          Create the union of two pathway lists
 Xprep                   Calculation of input to stat.bayesian starting
                         from linear model
 Zfreq                   Bayesian analysis of a Comparative experiment

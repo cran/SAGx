@@ -1,7 +1,7 @@
-% -*- mode: noweb; noweb-default-code-mode: R-mode; -*-
 
 \documentclass[a4paper]{article}
 
+% Sweave("u:/R22/samroc-ex.Rnw", echo = FALSE)
 
 \usepackage[pdftex,
 bookmarks,
@@ -19,6 +19,7 @@ pdftitle={Samroc example}]{hyperref}
 \usepackage[authoryear,round]{natbib}
 \usepackage{graphicx}
 \usepackage{amsfonts}
+\usepackage{C:/Program/R/Sweave}
 
 \begin{document}
 
@@ -28,7 +29,7 @@ pdftitle={Samroc example}]{hyperref}
 
 \maketitle
 
-\section*{Analysis of the data from Golub \ital{et al.}}
+\section*{Analysis of the data from Golub \textit{et al.}}
 
 Consider the microarray experiment in \cite{golubetal} where ALL and AML types are compared.
 The data are available within package \textit{multtest}. We can analyse those data in SAGx  with the function \textit{samrocNboot}. The ideas behind
@@ -37,13 +38,14 @@ it are presented in \cite{broberg:2003}. Briefly, the method relies on a penalis
 <<>>=
 library(multtest)
 data(golub)
+set.seed(849867)
 samroc.res <- samrocNboot(data = golub, formula = ~as.factor(golub.cl))
 samroc.res$p0
 @
 The function \textit{samrocNboot} is used to perform a penalised \textit{t}-test. The estimated
 proportion unchanged genes equals \Sexpr{format.pval(samroc.res$p0, digits = 2)}. The distribution of \textit{p}-values is shown in Figure~\ref{hist1},
 which confirms that many genes are changed. Furthermore, using the function \textit{pava.fdr} we obtain estimates of the FDR and 
-of the local FDR, see Figure~\ref{hist2}. This function is presented in \cite{broberg:2004} and combines the local FDR estimator 
+of the local FDR, see Figure~\ref{hist2}. This function is presented in \cite{broberg:2005} and combines the local FDR estimator 
 of \cite{aubert:2004} with Poisson regression (see \cite{efron:2004}) and isotonic regression.
 
 

@@ -58,7 +58,7 @@ samrocNboot <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N
         di <- t(utest$Mbar/(sqrt(utest$Vest/utest$k) + ssq[i]))
         di.min <- quantile(abs(di), probs = (nrow(data)-N)/nrow(data), na.rm = TRUE)
         library(stats)
-        Fn <- ecdf(abs(dstari))
+        Fn <- ecdf(abs(as.vector(dstari)))
         alpha <- 1 - Fn(di.min)
         pj <- 1 - Fn(abs(di))
 #        test <- sweep(abs(dstari),1, abs(di), FUN = "-")
@@ -73,7 +73,7 @@ samrocNboot <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N
     pfn <- matrix(nrow = length(ssq), ncol = length(alpha))
     tone <- t(utest$Mbar/ss)
     tnull <- diffs/sses
-    Fn <- ecdf(abs(tnull))
+    Fn <- ecdf(abs(as.vector(tnull)))
     ps <- 1 - Fn(abs(tone))
 #    test <- sweep(abs(tnull),1, abs(tone), FUN = "-")
 #    ps <- t(crossprod(c(rep(1/ncol(test), ncol(test))), t(test > 0)))
@@ -96,7 +96,7 @@ samrocNboot <- function (data = M, formula = ~as.factor(g), contrast = c(0,1), N
     dstari <- diffs/(snew + sses)
     Vest0 <- as.numeric(utest$k) * sses^2
 #    pj <- apply(as.matrix(t(di)), 1, function(x) mean(abs(dstari) > abs(x)))
-    Fn <- ecdf(abs(dstari))
+    Fn <- ecdf(abs(as.vector(dstari)))
 #    test <- sweep(abs(dstari),1, abs(di), FUN = "-")
     pj <- 1 - Fn(abs(di))
 #    pj <- t(crossprod(c(rep(1/ncol(test), ncol(test))), t(test > 0)))

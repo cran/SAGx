@@ -43,5 +43,6 @@ Fstat <- function (indata = M, formula1 = ~as.factor(g), formula0 = "mean",  des
         Fstat0 <- (nobs - npar1) * SSmodel/((npar1 - npar0) * totSS.star)
         Fstat0.res[,i] <- Fstat0       
     }}
-    if (!is.null(B)) {Fn <- ecdf(Fstat0.res); p.value <- 1 - Fn(Fstatv)}
+# as.vector introduced 12OCT05
+    if (!is.null(B)) {Fn <- ecdf(as.vector(Fstat0.res)); p.value <- 1 - Fn(Fstatv)}
     list(Fstat = Fstatv, fnum = nobs - npar1, fdenom = npar1 -npar0, design1 = xmat1, design0 = xmat0, SS1 = totSS.out, SS0 = SSmodel.out, pvalue = p.value)}

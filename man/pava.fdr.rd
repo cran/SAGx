@@ -25,6 +25,6 @@
 \keyword{htest}
 
 \references{
-Broberg, P : A comparative review of estimates of the proportion unchanged genes and the false discovery rate, submitted (2004) \cr
-Aubert J, Bar-Hen A, Daudin J-J, Robin S: Determination of the differentially expressed genes in microarray experiments using local FDR. \emph{BMC Bioinformatics} 2004, 5(1):125
+Broberg, P : A comparative review of estimates of the proportion unchanged genes and the false discovery rate, \emph{BMC Bioinformatics} 2005, 5(1):199 \cr
+Aubert J, Bar-Hen A, Daudin J-J, Robin S: Determination of the differentially expressed genes in microarray experiments using local FDR. \emph{BMC Bioinformatics} 2004, 6(1):125
 }
