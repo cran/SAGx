@@ -1,0 +1,13 @@
+v 1.5.2 some minor changes to documentation
+
+v 1.5.1 Documentation and code cleaned up to pass CRAN requirements. 
+
+v 1.4.9 
+pava.fdr changed to output results in the same order as input p-values.
+
+v 1.4.6 
+pava.fdr changed to make use of faster isotonic regression in isoreg
+
+v 1.4.5 
+
+Fstat. Changed to take advantage of vectorised calculations. Permutation of residuals corrected.
